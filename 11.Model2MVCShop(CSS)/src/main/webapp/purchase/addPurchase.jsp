@@ -6,6 +6,24 @@
 <!DOCTYPE html>
 <html>
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <head>
 
 	<title>주문 완료</title>
