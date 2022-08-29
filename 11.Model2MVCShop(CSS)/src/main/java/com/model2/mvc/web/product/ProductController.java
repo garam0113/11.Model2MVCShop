@@ -78,7 +78,7 @@ public class ProductController {
 				sb.append("*");
 			}
 			
-			String path = "C:\\Users\\bitcamp\\git\\09.Model2MVCShop\\09.Model2MVCShop(jQuery_s)\\src\\main\\webapp\\images\\uploadFiles\\";
+			String path = "C:\\Users\\bitcamp\\git\\11.Model2MVCShop\\11.Model2MVCShop(CSS)\\src\\main\\webapp\\images\\uploadFiles";
 			File saveFile = new File(path + files.getOriginalFilename());
 			
 			boolean isExists = saveFile.exists();
@@ -104,7 +104,7 @@ public class ProductController {
 		System.out.println("/product/addProduct : GET & POST");
 		
 		if(FileUpload.isMultipartContent(request)) {
-			String temDir = "C:\\Users\\bitcamp\\git\\00.Model2MVCShop\\00.Model2MVCShop\\src\\main\\webapp\\images\\uploadFiles\\";
+			String temDir = "C:\\Users\\bitcamp\\git\\11.Model2MVCShop\\11.Model2MVCShop(CSS)\\src\\main\\webapp\\images\\uploadFiles";
 			
 			DiskFileUpload fileUpload = new DiskFileUpload();
 			
@@ -262,7 +262,7 @@ public class ProductController {
 					sb.append("*");
 				}
 				
-				String path = "C:\\Users\\bitcamp\\git\\10.Model2MVCShop\\10.Model2MVCShop(AjaxForStudy)\\src\\main\\webapp\\images\\uploadFiles\\";
+				String path = "C:\\Users\\bitcamp\\git\\11.Model2MVCShop\\11.Model2MVCShop(CSS)\\src\\main\\webapp\\images\\uploadFiles";
 	//			String path = "C:\\Users\\H2\\git\\00.Model2MVCShop\\00.Model2MVCShop\\src\\main\\webapp\\images\\uploadFiles\\";
 				File saveFile = new File(path + files.getOriginalFilename());
 				

@@ -34,7 +34,7 @@
 					return;
 				}
 				
-				//$("form").attr("method", "POST").attr("action", "/user/login").attr("target", "_parent").submit();
+				$("form").attr("method", "POST").attr("action", "/user/login").attr("target", "_parent").submit();
 				
 			});
 		});
