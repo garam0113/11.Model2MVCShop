@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  						
+<mapper namespace="PurchaseMapper">
+
+
+
+	<resultMap	id="purchaseSelectMap" type="purchase">
+		<result property="orderNo"			column="order_no"			jdbcType="INTEGER" />
+		<result property="tranNo" 			column="tran_no" 			jdbcType="INTEGER" />	
+		<result property="paymentOption" 	column="payment_option"		jdbcType="VARCHAR" />
+		<result property="receiverName"		column="receiver_name"		jdbcType="VARCHAR" />
+		<result property="receiverPhone"	column="receiver_phone"	 	jdbcType="VARCHAR" />
+		<result property="divyAddr" 		column="demailaddr"			jdbcType="VARCHAR" />
+		<result property="divyRequest"		column="dlvy_request" 		jdbcType="VARCHAR" />
+		<result property="tranCode"			column="tran_status_code"	jdbcType="VARCHAR" />
+		<result property="orderDate"		column="order_date" 		jdbcType="DATE" />
+		<result property="divyDate" 		column="dlvy_date" 			jdbcType="DATE" />
+		<result property="buyQuantity"		column="buy_quantity" 		jdbcType="INTEGER" />
+		
+		<association property="purchaseProd" javaType="product">
+			<result property="prodNo" 		column="prod_no" 			jdbcType="VARCHAR"/>
+			<result property="prodName"		column="prod_name" 			jdbcType="VARCHAR" />
+			<result property="prodDetail" 	column="prod_detail" 		jdbcType="VARCHAR" />
+			<result property="manuDate"		column="manufacture_day" 	jdbcType="VARCHAR" />
+			<result property="price" 		column="price" 				jdbcType="INTEGER" />
+			<result property="fileName"		column="image_file" 		jdbcType="VARCHAR" />
+			<result property="proTranCode"	column="ts"					jdbcType="VARCHAR" />
+			<result property="prodQuantity" column="prod_quantity"		jdbcType="INTEGER" />
+			<result property="regDate" 		column="reg_date" 			jdbcType="DATE" />
+		</association>
+	
+		<association property="buyer" javaType="user">
+			<result property="userId" 		column="buyer_id" 		jdbcType="VARCHAR"/>
+		</association>
+	</resultMap>
+
+
+
+	<insert		id="addPurchase"		parameterType="purchase" >
+		INSERT INTO transaction
+		VALUES (
+				seq_transaction_tran_no.NEXTVAL		,
+				#{orderNo:INTEGER}					,
+				#{purchaseProd.prodNo:INTEGER}		,
+				#{buyer.userId:VARCHAR}				,
+				#{paymentOption:VARCHAR}			,
+				#{receiverName:VARCHAR}				,
+				#{receiverPhone:VARCHAR}			,
+				#{divyAddr:VARCHAR}					,
+				#{divyRequest:VARCHAR}				,
+				'1'									,
+				#{orderDate:VARCHAR}				,				
+				#{divyDate:VARCHAR}					,
+				#{buyQuantity:INTEGER}	)
+
+	</insert>
+	
+	
+	
+	<select		id="getPurchaseByOrder"	parameterType="int" 		resultMap="purchaseSelectMap">
+		SELECT
+		order_no				,
+		tran_no					,
+		prod_no					,
+		buyer_id				,
+		payment_option			,
+		receiver_name			,
+		receiver_phone			,
+		demailaddr				,
+		dlvy_request			,
+		TRIM(tran_status_code) tran_status_code,
+		order_date				,
+		dlvy_date				,
+		buy_quantity	
+		FROM transaction WHERE order_no = #{orderNo}
+	</select>
+	
+	
+	<select		id="getPurchase"		parameterType="int" 		resultMap="purchaseSelectMap">
+		SELECT
+		tran_no					,
+		prod_no					,
+		buyer_id				,
+		payment_option			,
+		receiver_name			,
+		receiver_phone			,
+		demailaddr				,
+		dlvy_request			,
+		TRIM(tran_status_code) tran_status_code,
+		order_date				,
+		dlvy_date				,
+		buy_quantity	
+		FROM transaction WHERE tran_no = #{tranNo}
+	</select>
+	
+	
+	
+	<update	id="updatePurchase"				parameterType="purchase" >
+	   	UPDATE transaction
+	   	<set>
+	   		receiver_name 			= #{receiverName}		,
+			receiver_phone			= #{receiverPhone}		,
+			demailaddr 				= #{divyAddr}			,
+			dlvy_request			= #{divyRequest}		,
+			dlvy_date				= #{divyDate}			
+	   	</set>
+	   	WHERE tran_no = #{tranNo}
+	</update>
+
+
+	
+	 <update	id="updateTransCode"		parameterType="purchase" >
+	   	UPDATE transaction
+	   	<set>
+	   		tran_status_code	= NVL(TO_NUMBER(tran_status_code), 0) + 1
+	   		<where>
+	   			<if test="purchaseProd != null">
+	   				prod_no = #{purchaseProd.prodNo}	   			
+	   			</if>
+	   			
+	   			<if test="purchaseProd == null">
+	   				tran_no = #{tranNo}	   			
+	   			</if>
+	   		</where>
+	   	</set>
+	 </update>
+	 
+	 
+	 
+	<select id="getPurchaseList"			parameterType="hashmap"			resultMap="purchaseSelectMap">
+	SELECT
+	inner_table.*
+	FROM (
+		SELECT 
+		ROWNUM row_seq, 
+		deep_inner.* 
+		FROM ( 
+			SELECT
+			order_no, p.prod_no, tran_no, buyer_id, receiver_name, receiver_phone, tran_status_code, p.prod_name, t.buy_quantity, p.price 
+			FROM transaction t, users u, product p 
+			WHERE t.buyer_id = u.user_id 
+			AND p.prod_no = t.prod_no
+			<if test='userId != "manage"'>
+				AND u.user_id = #{userId}
+			</if>
+			ORDER BY tran_no DESC ) deep_inner
+		WHERE ROWNUM &lt;= #{search.endRowNum} ) inner_table
+	WHERE inner_table.row_seq BETWEEN #{search.startRowNum} AND #{search.endRowNum}
+	</select>
+	 
+	 
+	 
+	 <select  id="getTotalCount"  			parameterType="String"			resultType="int">
+	  	SELECT
+	  	COUNT(*)
+	  	FROM (
+	  			SELECT
+	  			ROW_NUMBER() OVER(PARTITION BY order_no ORDER BY tran_no DESC) AS sameOrder	,
+	  			tran_no					,
+				prod_no					,
+				buyer_id				,
+				payment_option			,
+				receiver_name			,
+				receiver_phone			,
+				demailaddr				,
+				dlvy_request			,
+				TRIM(tran_status_code) tran_status_code,
+				order_date				,
+				dlvy_date				,
+				buy_quantity	
+				FROM transaction
+				<where>
+					<if test="value=='manage'">
+						buyer_id = #{value}
+					</if>
+				</where>
+
+									) countTable
+	 </select>
+	 
+	 
+	 <select id="getOrderNo" resultType="int">
+	 	SELECT
+	 	order_no
+	 	FROM (
+			 	SELECT
+			 	order_no
+			 	FROM transaction
+			 	ORDER BY order_no DESC )
+		WHERE ROWNUM = 1
+	 </select>
+	 
+	 
+	 
+	<select id="getOrderList"				parameterType="hashmap"			resultMap="purchaseSelectMap">
+		SELECT
+		inner_table.*
+		FROM (
+			SELECT 
+			ROWNUM row_seq, 
+			deep_inner.* 
+			FROM ( 
+				SELECT
+				order_no																	,
+				ROW_NUMBER() OVER(PARTITION BY order_no ORDER BY tran_no DESC) AS sameOrder	,
+				p.prod_no, tran_no, buyer_id, receiver_name, receiver_phone					,
+				tran_status_code, p.prod_name, t.buy_quantity, p.price 
+				FROM transaction t, users u, product p 
+				WHERE t.buyer_id = u.user_id 
+				AND p.prod_no = t.prod_no
+				<if test='userId != "manage"'>
+					AND u.user_id = #{userId}
+				</if>
+				ORDER BY tran_no DESC ) deep_inner
+			WHERE ROWNUM &lt;= #{search.endRowNum} AND sameOrder &lt;= '1' ) inner_table
+		WHERE inner_table.row_seq BETWEEN #{search.startRowNum} AND #{search.endRowNum}
+		</select>
+</mapper>

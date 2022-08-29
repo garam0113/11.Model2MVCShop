@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  						
+<mapper namespace="BasketMapper">
+
+
+
+	<resultMap	id="basketSelectMap" type="basket">
+		<result property="basketCount"	column="basket_count" 	jdbcType="INTEGER" />
+		<result property="userId" 		column="user_id" 		jdbcType="VARCHAR" />
+		<result property="prodNo" 		column="prod_no" 		jdbcType="INTEGER" />
+	</resultMap>
+	
+	<resultMap	id="productSelectMap" type="product">
+		<result property="prodNo" 		column="prod_no" 			jdbcType="VARCHAR"/>
+		<result property="prodName"		column="prod_name" 			jdbcType="VARCHAR" />
+		<result property="prodDetail" 	column="prod_detail" 		jdbcType="VARCHAR" />
+		<result property="manuDate"		column="manufacture_day" 	jdbcType="VARCHAR" />
+		<result property="price" 		column="price" 				jdbcType="VARCHAR" />
+		<result property="fileName"		column="image_file" 		jdbcType="VARCHAR" />
+		<result property="proTranCode"	column="ts"					jdbcType="VARCHAR" />
+		<result property="prodQuantity" column="prod_quantity"		jdbcType="INTEGER" />
+		<result property="regDate" 		column="reg_date" 			jdbcType="DATE"	/>
+		<result property="basketCount"	column="basket_count"		jdbcType="INTEGER" />
+	</resultMap>
+
+
+
+	<insert id="addBasket"			parameterType="hashmap">
+		INSERT INTO basket
+		VALUES (
+					#{userId}				,
+					#{product.prodNo}		,
+					#{addQuantity}
+											)
+	</insert>
+	
+	
+	
+	<select id="getBasket"			parameterType="hashmap"		resultMap="basketSelectMap">
+		SELECT
+		basket_count		,
+		user_id				,
+		prod_no
+		FROM basket
+		<where>
+			user_id = #{userId} AND prod_no = #{product.prodNo}
+		</where>
+	</select>
+	
+		
+	
+	<select id="getBasketList"		parameterType="hashmap"			resultMap="productSelectMap">
+		SELECT p.*, 
+		b.basket_count  
+		FROM basket b, product p 
+		WHERE b.prod_no = p.prod_no 
+	</select>
+	
+	
+	
+	<update	id="updateBasket"		parameterType="hashmap" >
+	   	UPDATE basket
+	   	<set>
+	   	basket_count			= #{addQuantity}
+	   	</set>
+	   	<where>
+	   		user_id 			= #{userId}
+	   		AND prod_no 		= #{product.prodNo}
+	   	</where>
+	 </update>
+
+
+
+	<delete id="removeBasket"			parameterType="hashmap">
+		DELETE FROM basket
+		WHERE user_id = #{userId}
+		AND prod_no IN 
+		<foreach collection="prodNo" item = "value" open="(" separator=", " close=")">
+			#{value} 
+		</foreach>
+	</delete>
+	
+	
+	
+	<select  id="getTotalCount"  parameterType="search"	 resultType="int">
+	  	SELECT
+	  	COUNT(*)
+	  	FROM (
+	  			SELECT 
+	  			user_id			,
+	  			prod_no			,
+	  			basket_count	
+				FROM basket
+								) countTable						
+	 </select>
+	
+	
+	
+</mapper>

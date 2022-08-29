@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  						
+<mapper namespace="ProductMapper">
+
+
+
+	<resultMap	id="productSelectMap" type="product">
+		<result property="prodNo" 		column="prod_no" 			jdbcType="INTEGER"/>
+		<result property="prodName"		column="prod_name" 			jdbcType="VARCHAR" />
+		<result property="prodDetail" 	column="prod_detail" 		jdbcType="VARCHAR" />
+		<result property="manuDate"		column="manufacture_day" 	jdbcType="VARCHAR" />
+		<result property="price" 		column="price" 				jdbcType="INTEGER" />
+		<result property="fileName"		column="image_file" 		jdbcType="VARCHAR" />
+		<result property="proTranCode"	column="ts"					jdbcType="VARCHAR" />
+		<result property="prodQuantity" column="prod_quantity"		jdbcType="INTEGER" />
+		<result property="regDate" 		column="reg_date" 			jdbcType="DATE" />
+	</resultMap>
+
+
+
+	<insert		id="addProduct"		parameterType="product" >
+	 	INSERT
+		INTO product (	
+						prod_no			, 
+						prod_name 		, 
+						prod_detail 	, 
+						manufacture_day	, 
+						price			, 
+						image_file		, 
+						reg_date		, 
+						prod_quantity	
+											) 
+		VALUES		(	
+						seq_product_prod_no.nextval 	, 
+						#{prodName}						, 
+						#{prodDetail} 					, 
+						#{manuDate:VARCHAR}	 			, 
+						#{price}						, 
+						#{fileName:VARCHAR} 			, 
+						SYSDATE							,
+						#{prodQuantity}
+											)
+	</insert>
+
+
+
+	<select		id="getProduct"		parameterType="int"			resultMap="productSelectMap">
+		SELECT
+		DISTINCT p.prod_no	,
+		p.prod_name			,
+		p.prod_detail		,
+		p.manufacture_day	,
+		p.price				,
+		p.image_file		,
+		p.reg_date			,
+		p.prod_quantity		,
+		NVL(t.tran_status_code, 0) AS ts
+		FROM product p, transaction t
+		WHERE p.prod_no = t.prod_no(+)
+		AND p.prod_no = #{prod_no}	
+	</select>
+
+	
+	
+	 <update	id="updateProduct"	parameterType="product" >
+
+		   	UPDATE product
+		   	<set>
+		   		prod_name 			= #{prodName}			,
+				prod_detail			= #{prodDetail}			,
+				manufacture_day 	= #{manuDate}			,
+				price				= #{price}				,
+				image_file			= #{fileName:VARCHAR}	,
+				prod_quantity		= #{prodQuantity}
+		   	</set>
+		   	WHERE prod_no = #{prodNo}
+	 </update>
+	 
+	 
+	 
+	 <select  id="getProductList"  parameterType="search"	resultMap="productSelectMap">
+	 	SELECT
+	 	inner_table.*
+	 	FROM (
+	 			SELECT
+	 			rownum AS row_seq						,
+	 			deep_table.*
+	 			FROM (
+	 					SELECT
+	 					DISTINCT p.prod_no				, 
+	 					p.prod_name						, 
+	 					p.price							, 
+	 					p.prod_detail					, 
+	 					p.prod_quantity					,
+	 					p.image_file					,
+	 					NVL(t.tran_status_code, 0) ts
+	 					FROM product p, transaction t
+	 						<if test="searchCondition != null || maxPrice != 0 ">
+	 							<where>
+	 								p.prod_no = t.prod_no(+)
+	 								<if test="searchCondition == 0 and searchKeyword !='' ">
+							 			AND p.prod_no = #{searchKeyword}
+									</if>
+	 							
+									<if test="searchCondition == 1 and searchKeyword !='' ">
+							 			AND p.prod_name LIKE '%${searchKeyword}%'
+									</if>	
+									
+									<if test="maxPrice != null and maxPrice != ''">
+							 			AND p.price BETWEEN #{minPrice} AND #{maxPrice}
+									</if>														
+								</where>
+									<if test="order == 1">
+										ORDER BY p.price DESC
+									</if>
+									
+									<if test="order == 2">
+										ORDER BY p.price ASC
+									</if>
+									
+									<if test="order != 1 and order != 2">
+										ORDER BY p.prod_no DESC
+									</if>
+	 						</if>
+	 													) deep_table
+	 			WHERE ROWNUM &lt;= #{endRowNum} 					) inner_table
+		WHERE row_seq BETWEEN #{startRowNum} AND #{endRowNum}	
+	 </select>
+	 
+	 
+	 
+	 <select  id="getTotalCount"  parameterType="search"	 resultType="int">
+	  	SELECT
+	  	COUNT(*)
+	  	FROM (
+	  			SELECT 
+	  			prod_no		,
+	  			prod_name	,
+	  			prod_detail	,
+	  			price	
+				FROM product
+					<if test="searchCondition != null || maxPrice != 0">
+						<where>
+							<if test="searchCondition == 0 and searchKeyword !='' ">
+						 		AND prod_no = #{searchKeyword}
+							</if>
+							
+							<if test="searchCondition == 1 and searchKeyword !='' ">
+					 			prod_name LIKE '%${searchKeyword}%'
+							</if>
+							
+							<if test="maxPrice != null and maxPrice != ''" >
+					 			AND price BETWEEN #{minPrice} AND #{maxPrice}
+							</if>
+						</where>
+					</if> 	
+								) countTable						
+	 </select>
+	 
+	 
+	 
+</mapper>

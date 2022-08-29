@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  						
+<mapper namespace="ReplyMapper">
+
+
+	
+	<resultMap type="reply" id="replySelectMap">
+		<result property="replyNo"		column="reply_no"		jdbcType="INTEGER"/>
+		<result property="userId"		column="user_id"		jdbcType="VARCHAR"/>
+		<result property="reply"		column="reply"			jdbcType="VARCHAR"/>
+		<result property="date"			column="date"			jdbcType="VARCHAR"/>
+		<result property="flag"			column="flag"			jdbcType="INTEGER"/>
+	</resultMap>
+
+
+
+	<insert id="addReply"			parameterType="hashmap"	>
+		INSERT 
+		INTO reply
+		VALUES (
+					)
+	</insert>
+
+
+	
+	
+</mapper>

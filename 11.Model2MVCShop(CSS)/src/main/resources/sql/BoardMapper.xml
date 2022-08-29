@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  						
+<mapper namespace="BoardMapper">
+
+
+	
+	<resultMap type="board" id="boardSelectMap">
+		<result property="boardNo"		column="board_no"		jdbcType="INTEGER"/>
+		<result property="userId"		column="user_id"		jdbcType="VARCHAR"/>
+		<result property="password"		column="password"		jdbcType="VARCHAR"/>
+		<result property="flag"			column="flag"			jdbcType="INTEGER"/>
+		<result property="title"		column="title"			jdbcType="VARCHAR"/>
+		<result property="content"		column="content"		jdbcType="VARCHAR"/>
+	</resultMap>
+
+
+
+	<insert id="addBoard"			parameterType="hashmap"	>
+		INSERT 
+		INTO board
+		VALUES (seq_board_bo_no.nextval	,
+				#{board.userId}			,
+				#{board.password}		,
+				#{board.title}			,
+				#{board.content}		,
+				'1'		)
+	</insert>
+
+
+
+	<select id="getBoardList"		parameterType="hashmap"		resultMap="boardSelectMap">
+		SELECT
+		board_no	,
+		user_id		,
+		password	,
+		title		,
+		content		,
+		flag		
+		FROM board
+		WHERE flag = '1'
+		ORDER BY board_no DESC
+	</select>
+	
+	
+	
+	<select id="getBoard"			parameterType="hashmap"		resultMap="boardSelectMap">
+		SELECT
+		board_no	,
+		user_id		,
+		password	,
+		title		,
+		content		,
+		flag		
+		FROM board
+		<where>
+			AND board_no = #{boardNo}
+		</where>
+	</select>
+	
+	
+	
+	<select  id="getTotalCount"  parameterType="search"	 resultType="int">
+	  	SELECT
+	  	COUNT(*)
+	  	FROM (
+	  			SELECT 
+	  			board_no		,
+	  			user_id			,
+	  			password		,
+	  			title			,
+	  			content			,
+	  			flag
+				FROM board
+				<where>
+					AND flag	=	'1'
+				</where>
+								) countTable						
+	 </select>
+	
+	
+	<update id="updateBoard"	parameterType="board">
+		UPDATE board
+		<set>
+			title	=	#{title}	,
+			content	=	#{content}		
+		</set>	
+		<where>
+			board_no=	#{boardNo}
+		</where>
+	</update>
+	
+	
+	
+	<update id="deleteBoard"	parameterType="int">
+		UPDATE board
+		<set>
+			flag	=	'0'		
+		</set>	
+		<where>
+			board_no=	#{boardNo}
+		</where>
+	</update>
+	
+	
+	
+</mapper>
