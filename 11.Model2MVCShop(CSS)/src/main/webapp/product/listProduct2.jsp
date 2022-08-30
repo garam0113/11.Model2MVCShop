@@ -137,7 +137,7 @@
 			fncGetListPrice();
 		});
 		
-		$(".ct_list_pop td:nth-child(5)").css("color", "yellow");
+		$(".ct_list_pop td:nth-child(5)").css("color", "red");
 		
 		///////////
 		
@@ -209,9 +209,6 @@
 			self.location = "/product/getProduct?prodNo=" + $(this).parent().find("td:eq(0)").text() + "&menu=${menu}";
 			
 		});
-		$(".name").on("click" , function(){
-			self.location = "/product/getProduct?prodNo=$menu=${menu} ";
-		})
 		
 		$("#low_price").bind("click", function(){
 			
@@ -280,22 +277,6 @@
 	});
 	
 	</script>
-		<style>
-	
-        body {
-            padding-top : 70px;
-            background-color : black;
-            color : yellow;
-        }
-        #low_price {
-        background-color : black;
-         }
-        #high_price {
-        background-color : black;
-        }
-   
-     
-   	</style>
 </head>
 
 <body bgcolor="#ffffff" text="#000000">
@@ -307,9 +288,9 @@
 	<table width="100%" height="37" border="0" cellpadding="0"	cellspacing="0">
 		<tr>
 			<td width="15" height="37">
-			
+				<img src="/images/ct_ttl_img01.gif" width="15" height="37"/>
 			</td>
-			<td  width="100%" style="padding-left:10px;">
+			<td background="/images/ct_ttl_img02.gif" width="100%" style="padding-left:10px;">
 				<table width="100%" border="0" cellspacing="0" cellpadding="0">
 					<tr>
 						<td width="93%" class="ct_ttl01">
@@ -373,7 +354,18 @@
 			</td>
 		</tr>
 		<tr>
-
+			<td class="ct_list_b" width="100">No</td>
+			<td class="ct_line02"></td>
+			<td class="ct_list_b" width="100">사진</td>
+			<td class="ct_line02"></td>
+			<td class="ct_list_b" width="150">상품명</td>
+			<td class="ct_line02"></td>
+			<td class="ct_list_b" width="150">가격</td>
+			<td class="ct_line02"></td>
+			<td class="ct_list_b" width="300">정보</td>	
+			<td class="ct_line02"></td>
+			<td class="ct_list_b" width="100">현재상태</td>
+			<td class="ct_line02"></td>
 			
 			<c:if test="${!empty user && fn:trim(user.role) == 'admin' && menu == 'manage'}">
 				<td class="ct_list_b" width="100">남은수량</td>
@@ -402,7 +394,7 @@
 				
 				
 				<td></td>
-				<td align="left" class="name" style="text-decoration:underline">
+				<td align="left" style="text-decoration:underline">
 					${list.prodName}
 				</td>
 				<td></td>
@@ -453,13 +445,6 @@
 
 </form>
 </div>
-<div class="row">
-  <div class="col-xs-6 col-md-3">
-    <a href="#" class="thumbnail">
-     
-    </a>
-  </div>
-  ...
-</div>
+
 </body>
 </html>

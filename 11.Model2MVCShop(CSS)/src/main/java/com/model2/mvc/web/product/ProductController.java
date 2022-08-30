@@ -99,7 +99,7 @@ public class ProductController {
 	}
 	
 //	@RequestMapping("/addProduct.do")
-	@RequestMapping(value = "addProduct_")
+	@RequestMapping(value = "addProduct")
 	public String addProduct(HttpServletRequest request) throws Exception {
 		System.out.println("/product/addProduct : GET & POST");
 		
@@ -180,7 +180,7 @@ public class ProductController {
 			System.out.println("인코딩 타입 multipart/form-data 아님");
 		}
 		
-		return "/product/listProduct";
+		return "forward:/product/addProductView.jsp";
 	}
 		
 	//@RequestMapping("/getProduct.do")

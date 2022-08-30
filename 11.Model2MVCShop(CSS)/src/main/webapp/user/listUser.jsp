@@ -37,7 +37,7 @@
 			//==> DOM Object GET 3가지 방법 ==> 1. $(tagName) : 2.(#id) : 3.$(.className)
 			//==> 3 과 1 방법 조합 : $(".className tagName:filter함수") 사용
 			
-			$(".ct_list_pop td:nth-child(3)").hover(
+			$(".ct_list_pop td:nth-child(3)").on("click",
 					
 				function(){
 				
@@ -78,7 +78,7 @@
 						}
 					});
 					
-					$("#" + userId + "").dialog("open");
+					$("#" + userId + "").dialog("close");
 				},
 				
 				function(){
@@ -97,7 +97,7 @@
 			$(".ct_list_pop td:nth-child(3)").css("color" , "blue");
 			$("h7").css("color", "blue");
 			
-			$(".ct_list_pop:nth-child(4n+6)" ).css("background-color" , "grey");
+			//$(".ct_list_pop:nth-child(4n+6)" ).css("background-color" , "grey");
 			
 			$(document).scroll(function(){
 				var maxHeight = $(document).height();
@@ -110,11 +110,12 @@
 					var count = 1;
 					var currentPage = parseInt($("#currentPage").val()) + count;
 					
-					alert("넘버 구하기 : " + $($(".ct_list_pop:last td")[0]).text());
+				
 					
 					$("#currentPage").val(currentPage);
 					
-					alert("currentPage : " + $("#currentPage").val());
+					
+					
 					
 					$.ajax(
 						{
@@ -139,12 +140,13 @@
 											+ '<tr><td id="' + item.userId +'" colspan="11" bgcolor="D6D7D6" height="1"></td></tr>';
 											
 								});
-								alert(value);
+							
 								
 								$(value).appendTo($("table")[4]);
 								
 								count++;
 							} // success close;
+							
 							
 						}
 					
@@ -170,12 +172,12 @@
 <input type="hidden" id="currentPage" name="currentPage" value="1"/>
 <input type="hidden" id="order" name="order" value="0"/>
 
-<table width="100%" height="750" border="0" cellpadding="0"	cellspacing="0">
+<table width="100%" height="0" border="0" cellpadding="0"	cellspacing="0">
 	<tr>
 		<td width="15" height="37">
-			<img src="/images/ct_ttl_img01.gif" width="15" height="37"/>
+			<img src="" width="15" height="37"/>
 		</td>
-		<td background="/images/ct_ttl_img02.gif" width="100%" style="padding-left:10px;">
+		<td background="" width="100%" style="padding-left:10px;">
 			<table width="100%" border="0" cellspacing="0" cellpadding="0">
 				<tr>
 					<td width="93%" class="ct_ttl01">회원 목록조회</td>
@@ -183,7 +185,7 @@
 			</table>
 		</td>
 		<td width="12" height="37">
-			<img src="/images/ct_ttl_img03.gif" width="12" height="37">
+			<!--  <img src="/images/ct_ttl_img03.gif" width="12" height="37">-->
 		</td>
 	</tr>
 </table>

@@ -1,16 +1,10 @@
 <%@ page contentType="text/html; charset=EUC-KR" %>
 <%@ page pageEncoding="EUC-KR"%>
-
-
-<!--  ///////////////////////// JSTL  ////////////////////////// -->
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-<!-- ///////////////////////////// 로그인시 Forward  /////////////////////////////////////// -->
  <c:if test="${ ! empty user }">
  	<jsp:forward page="main.jsp"/>
  </c:if>
- <!-- //////////////////////////////////////////////////////////////////////////////////////////////////// -->
-
 
 <!DOCTYPE html>
 
@@ -19,7 +13,7 @@
 <head>
 	<meta charset="EUC-KR">
 	
-	<!-- 참조 : http://getbootstrap.com/css/   -->
+	<!-- 참조 : http://getbootstrap.com/css/   참조 -->
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	
 	<!--  ///////////////////////// Bootstrap, jQuery CDN ////////////////////////// -->
@@ -29,20 +23,51 @@
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" ></script>
 	
 	<!--  ///////////////////////// CSS ////////////////////////// -->
-	<style></style>
-   	
-   	<!--  ///////////////////////// JavaScript ////////////////////////// -->
+	<style>
+    	 body >  div.container{ 
+        	border: 3px solid #D6CDB7;
+            margin-top: 10px;
+        }
+    </style>
+    
+    <!--  ///////////////////////// JavaScript ////////////////////////// -->
 	<script type="text/javascript">
-		
-		//============= 회원원가입 화면이동 =============
+
+		//============= "로그인"  Event 연결 =============
 		$( function() {
-			//==> 추가된부분 : "addUser"  Event 연결
-			$("a[href='#' ]:contains('회원가입')").on("click" , function() {
+			
+			$("#userId").focus();
+			
+			//==> DOM Object GET 3가지 방법 ==> 1. $(tagName) : 2.(#id) : 3.$(.className)
+			$("button").on("click" , function() {
+				var id=$("input:text").val();
+				var pw=$("input:password").val();
+				
+				if(id == null || id.length <1) {
+					alert('ID 를 입력하지 않으셨습니다.');
+					$("#userId").focus();
+					return;
+				}
+				
+				if(pw == null || pw.length <1) {
+					alert('패스워드를 입력하지 않으셨습니다.');
+					$("#password").focus();
+					return;
+				}
+				
+				$("form").attr("method","POST").attr("action","/user/login").attr("target","_parent").submit();
+			});
+		});	
+		
+		
+		//============= 회원원가입화면이동 =============
+		$( function() {
+			//==> DOM Object GET 3가지 방법 ==> 1. $(tagName) : 2.(#id) : 3.$(.className)
+			$("a[href='#' ]").on("click" , function() {
 				self.location = "/user/addUser"
 			});
 		});
 		
-		//============= 로그인 화면이동 =============
 		$( function() {
 			//==> 추가된부분 : "addUser"  Event 연결
 			$("a[href='#' ]:contains('로 그 인')").on("click" , function() {
@@ -50,122 +75,77 @@
 			});
 		});
 		
-	</script>	
+	</script>		
 	
 </head>
 
 <body>
+<style>
 
+      #sgr {
+        color: yellow;
+      }
+
+body {background-color: black;}
+
+</style>
 	<!-- ToolBar Start /////////////////////////////////////-->
-	<div class="navbar  navbar-default">
-		
+	<div class="navbar  navbar-primary">
         <div class="container">
-        
-        	<a class="navbar-brand" href="#">Model2 MVC Shop</a>
-			
-			<!-- toolBar Button Start //////////////////////// -->
-			<div class="navbar-header">
-			    <button class="navbar-toggle collapsed" data-toggle="collapse" data-target="#target">
-			        <span class="sr-only">Toggle navigation</span>
-			        <span class="icon-bar"></span>
-			        <span class="icon-bar"></span>
-			        <span class="icon-bar"></span>
-			    </button>
-			</div>
-			<!-- toolBar Button End //////////////////////// -->
-			
-			<div class="collapse navbar-collapse"  id="target">
-	             <ul class="nav navbar-nav navbar-right">
-	                 <li><a href="#">회원가입</a></li>
-	                 <li><a href="#">로 그 인</a></li>
-	           	</ul>
-	       </div>
-   		
+        	<a class="navbar-brand" href="/index.jsp" id="sgr">가람Shop</a>
    		</div>
    	</div>
-   	<!-- ToolBar End /////////////////////////////////////-->
-   	
-	<!--  화면구성 div Start /////////////////////////////////////-->
-	<div class="container">
-		
-		<!-- 다단레이아웃  Start /////////////////////////////////////-->
-		<div class="row">
+   	<!-- ToolBar End /////////////////////////////////////-->	
 	
-			<!--  Menu 구성 Start /////////////////////////////////////-->     	
-			<div class="col-md-3">
-		        
-		       	<!--  회원관리 목록에 제목 -->
-				<div class="panel panel-primary">
-					<div class="panel-heading">
-						<i class="glyphicon glyphicon-heart"></i> 회원관리
-         			</div>
-         			<!--  회원관리 아이템 -->
-					<ul class="list-group">
-						 <li class="list-group-item">
-						 	<a href="#">개인정보조회</a> <i class="glyphicon glyphicon-ban-circle"></i>
-						 </li>
-						 <li class="list-group-item">
-						 	<a href="#">회원정보조회</a> <i class="glyphicon glyphicon-ban-circle"></i>
-						 </li>
-					</ul>
-		        </div>
-               
-               
-				<div class="panel panel-primary">
-					<div class="panel-heading">
-							<i class="glyphicon glyphicon-briefcase"></i> 판매상품관리
-         			</div>
-					<ul class="list-group">
-						 <li class="list-group-item">
-						 	<a href="#">판매상품등록</a> <i class="glyphicon glyphicon-ban-circle"></i>
-						 </li>
-						 <li class="list-group-item">
-						 	<a href="#">판매상품관리</a> <i class="glyphicon glyphicon-ban-circle"></i>
-						 </li>
-					</ul>
-		        </div>
-               
-               
-				<div class="panel panel-primary">
-					<div class="panel-heading">
-							<i class="glyphicon glyphicon-shopping-cart"></i> 상품구매
-	    			</div>
-					<ul class="list-group">
-						 <li class="list-group-item"><a href="#">상품검색</a></li>
-						  <li class="list-group-item">
-						  	<a href="#">구매이력조회</a> <i class="glyphicon glyphicon-ban-circle"></i>
-						  </li>
-						 <li class="list-group-item">
-						 	<a href="#">최근본상품</a> <i class="glyphicon glyphicon-ban-circle"></i>
-						 </li>
-					</ul>
-				</div>
-				
-			</div>
-			<!--  Menu 구성 end /////////////////////////////////////-->   
-
-	 	 	<!--  Main start /////////////////////////////////////-->   		
-	 	 	<div class="col-md-9">
-				<div class="jumbotron">
-			  		<h1>Model2 MVC Shop</h1>
-			  		<p>로그인 후 사용가능...</p>
-			  		<p>로그인 전 검색만 가능합니다.</p>
-			  		<p>회원가입 하세요.</p>
-			  		
-			  		<div class="text-center">
-			  			<a class="btn btn-info btn-lg" href="#" role="button">회원가입</a>
-			  			<a class="btn btn-info btn-lg" href="#" role="button">로 그 인</a>
-			  		</div>
-			  	
-			  	</div>
-	        </div>
-	   	 	<!--  Main end /////////////////////////////////////-->   		
-	 	 	
-		</div>
-		<!-- 다단레이아웃  end /////////////////////////////////////-->
+	<!--  화면구성 div Start /////////////////////////////////////-->
+	<div class="container-fluid">
+		<!--  row Start /////////////////////////////////////-->
+		<div class="row">
 		
-	</div>
-	<!--  화면구성 div end /////////////////////////////////////-->
+			<div class="col-md-6">
+					<img src="/images/a.png" class="img-rounded" width="100%" />
+			</div>
+	   	 	
+	 	 	<div class="col-md-6">
+	 	 	
+		 	 	<br/><br/>
+				
+				<div class="">	 	 	
+		 	 		<h1 class="text-center" id="sgr">로 &nbsp;&nbsp;그 &nbsp;&nbsp;인</h1>
+
+			        <form class="form-horizontal">
+		  
+					  <div class="form-group">
+					    <label for="userId" class="col-sm-4 control-label" id="sgr">아 이 디</label>
+					    <div class="col-sm-6">
+					      <input type="text" class="form-control" name="userId" id="userId"  placeholder="아이디" >
+					    </div>
+					  </div>
+					  
+					  <div class="form-group">
+					    <label for="password" class="col-sm-4 control-label" id="sgr">패 스 워 드</label>
+					    <div class="col-sm-6">
+					      <input type="password" class="form-control" name="password" id="password" placeholder="패스워드" >
+					    </div>
+					  </div>
+					  
+					  <div class="form-group">
+					    <div class="col-sm-offset-4 col-sm-6 text-center">
+					      <button type="button" class="btn btn-primary"  >로 &nbsp;그 &nbsp;인</button>
+					      <a class="btn btn-primary btn" href="#" role="button">회 &nbsp;원 &nbsp;가 &nbsp;입</a>
+					    </div>
+					  </div>
+			
+					</form>
+			   	 </div>
+			
+			</div>
+			
+  	 	</div>
+  	 	<!--  row Start /////////////////////////////////////-->
+  	 	
+ 	</div>
+ 	<!--  화면구성 div end /////////////////////////////////////-->
 
 </body>
 

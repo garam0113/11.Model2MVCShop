@@ -151,7 +151,7 @@ public class UserController {
 		
 		session.invalidate();
 		
-		return "redirect:/index.jsp";
+		return "redirect:/user/loginView.jsp";
 	}
 	
 	//@RequestMapping("/checkDuplication.do")
