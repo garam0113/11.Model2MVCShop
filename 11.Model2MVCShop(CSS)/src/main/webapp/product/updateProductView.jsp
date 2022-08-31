@@ -201,8 +201,8 @@
 		
 		<c:forEach var="i" items="${text}">
 			<input type="hidden" id="fileHidden" value="${i}">
-			${i} <%-- <a href='/product/removeFileProduct?prodNo=${product.prodNo}&fileName=${i}'>삭제</a><br/><br/> --%>
-			&nbsp;<b>삭제</b><br/>
+			${i}  <a href='/product/removeFileProduct?prodNo=${product.prodNo}&fileName=${i}'>삭제</a><br/><br/> 
+			&nbsp;<b></b><br/>
 		</c:forEach>
 		
 		</td>

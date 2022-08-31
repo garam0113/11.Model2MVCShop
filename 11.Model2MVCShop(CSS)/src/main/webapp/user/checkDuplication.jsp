@@ -34,7 +34,7 @@
 			//==> - keyCode 값 alert() 확인하는 것 으로 종료
 			
 			$("#userId").bind("keydown", function(event){
-				alert("keyCode : " + event.keyCode);
+			
 				 
 				if(event.keyCode == '13') {
 					 

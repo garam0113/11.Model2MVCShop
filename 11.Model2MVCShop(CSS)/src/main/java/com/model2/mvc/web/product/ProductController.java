@@ -78,7 +78,7 @@ public class ProductController {
 				sb.append("*");
 			}
 			
-			String path = "C:\\Users\\bitcamp\\git\\11.Model2MVCShop\\11.Model2MVCShop(CSS)\\src\\main\\webapp\\images\\uploadFiles";
+			String path = "C:\\Users\\bitcamp\\git\\11.Model2MVCShop\\11.Model2MVCShop(CSS)\\src\\main\\webapp\\images\\uploadFiles\\";
 			File saveFile = new File(path + files.getOriginalFilename());
 			
 			boolean isExists = saveFile.exists();
@@ -104,7 +104,7 @@ public class ProductController {
 		System.out.println("/product/addProduct : GET & POST");
 		
 		if(FileUpload.isMultipartContent(request)) {
-			String temDir = "C:\\Users\\bitcamp\\git\\11.Model2MVCShop\\11.Model2MVCShop(CSS)\\src\\main\\webapp\\images\\uploadFiles";
+			String temDir = "C:\\Users\\bitcamp\\git\\11.Model2MVCShop\\11.Model2MVCShop(CSS)\\src\\main\\webapp\\images\\uploadFiles\\";
 			
 			DiskFileUpload fileUpload = new DiskFileUpload();
 			
@@ -182,8 +182,34 @@ public class ProductController {
 		
 		return "forward:/product/addProductView.jsp";
 	}
+	
+	@RequestMapping(value = "getProduct", method = RequestMethod.GET)
+	public String getProduct( Product product, @RequestParam("prodNo") int prodNo,
+				@RequestParam("menu") String menu,  Model model) throws Exception {
+		
+		System.out.println("/product/getProduct : GET");
+		System.out.println(prodNo);
+		System.out.println(menu);
+		
+		product = productService.getProduct(product.getProdNo());
+		
+		String URI = null;
+		
+		model.addAttribute("product", product);
+		model.addAttribute("menu", menu);
+		
+		if(menu.equals("manage")) {
+			URI = "forward:/product/updateProduct";
+		} else if (menu.equals("search")) {
+			URI = "forward:/product/getProduct.jsp";
+		}
+		
+	
+		return URI;
+	}
 		
 	//@RequestMapping("/getProduct.do")
+	
 	@RequestMapping(value = "getProduct")
 	public String getProduct(@ModelAttribute Product product, @RequestParam(value = "menu", defaultValue = "search") String menu, 
 								@CookieValue(name = "history", defaultValue = "") String history, Model model, HttpServletResponse response) throws Exception {
@@ -220,6 +246,7 @@ public class ProductController {
 		
 		return URI;
 	}
+	
 	
 
 	//@RequestMapping("/updateProductView.do")
@@ -262,7 +289,7 @@ public class ProductController {
 					sb.append("*");
 				}
 				
-				String path = "C:\\Users\\bitcamp\\git\\11.Model2MVCShop\\11.Model2MVCShop(CSS)\\src\\main\\webapp\\images\\uploadFiles";
+				String path = "C:\\Users\\bitcamp\\git\\11.Model2MVCShop\\11.Model2MVCShop(CSS)\\src\\main\\webapp\\images\\uploadFiles\\";
 	//			String path = "C:\\Users\\H2\\git\\00.Model2MVCShop\\00.Model2MVCShop\\src\\main\\webapp\\images\\uploadFiles\\";
 				File saveFile = new File(path + files.getOriginalFilename());
 				

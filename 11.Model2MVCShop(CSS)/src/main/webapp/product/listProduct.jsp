@@ -201,17 +201,11 @@
 		
 		///////////
 		
-		$(".ct_list_pop td:nth-child(5)").bind("click", function(){
-			
-			var thisRow = $(this).parent().find("td:eq(0)").text();
-			
-			alert("thisRow" + thisRow);
-			self.location = "/product/getProduct?prodNo=" + $(this).parent().find("td:eq(0)").text() + "&menu=${menu}";
-			
-		});
-		$(".name").on("click" , function(){
-			self.location = "/product/getProduct?prodNo=$menu=${menu} ";
-		})
+	$(".ct_list_pop td:nth-child(5)").bind("click", function(){
+				
+				self.location ="/product/getProduct?prodNo=" + $(this).text().trim();
+				
+			});
 		
 		$("#low_price").bind("click", function(){
 			
@@ -359,9 +353,7 @@
 	<table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-top:10px;">
 		<tr>
 			<td colspan="11">
-				<b>전체 ${ resultPage.totalCount } 건수, 현재 ${ resultPage.currentPage } 페이지</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-				<input type="button" id="low_price" value="낮은 가격순" >
-				<input type="button" id="high_price" value="높은 가격순">&nbsp;&nbsp;&nbsp;&nbsp;
+				
 				
 				<!-- <span><input type="text" name="minPrice" class="param-pricerange" maxlength="10" value="${search.minPrice != -1 ? search.minPrice : ""}"
 						class="ct_input_g" style="width:100px; height:19px" > ~</span>
@@ -375,64 +367,48 @@
 		<tr>
 
 			
-			<c:if test="${!empty user && fn:trim(user.role) == 'admin' && menu == 'manage'}">
-				<td class="ct_list_b" width="100">남은수량</td>
-			</c:if>
+			
 		</tr>
 		<tr>
-			<td colspan="11" bgcolor="808285" height="1"></td>
+			
 		</tr>
 		
 		<c:set var = "i" value = "0" />
 		<c:forEach var = "list" items = "${list}">
 			<c:set var = "i" value = "${i + 1}" />
 			<tr class="ct_list_pop">
-				<td align="center">${list.prodNo}</td>
-				<td></td>
-				<td align="center">
-				
-					<c:if test="${!fn:contains(list.fileName, '*')}">
-						<img src="/images/uploadFiles/${list.fileName}" width="100" height="100" align="absmiddle"/></td>		
-					</c:if>
-					
-					<c:if test="${fn:contains(list.fileName, '*')}">
-						<c:set var="value" value="${fn:split(list.fileName, '*')}"></c:set>
-						<img src="/images/uploadFiles/${value[0]}" width="100" height="100" align="absmiddle"/></td>
-					</c:if>
-				
 				
 				<td></td>
-				<td align="left" class="name" style="text-decoration:underline">
-					${list.prodName}
-				</td>
+				
+				<div class="col-sm-6 col-md-4">
+                <a href="/product/getProduct?prodNo=${ list.prodNo }&menu=${ menu }" class="thumbnail">
+      
+ 
+						<img src="/images/uploadFiles/${ list.fileName }" width="100" height="100" align="absmiddle"/>
+					  </a>
+                    </div>
+
+				
 				<td></td>
 				
-				<td align="left"><fmt:formatNumber type="number" maxFractionDigits="3" value="${list.price}" /></td>
-				
-				<td></td>
-				<td align="left">${list.prodDetail}</td>
 				<td></td>
 				
-				<td align="center">
-					<c:if test ="${fn:trim(list.prodQuantity) ne '0'}" >
-						판매중
-					</c:if>
-		
-					<c:if test ="${fn:trim(list.prodQuantity) eq '0'}" >
-						재고없음
-					</c:if>
-				</td>	
+				
+				
+				<td></td>
+				
+				<td></td>
+				
+				
 					
 				<td></td>
 			
-			<c:if test="${!empty user && fn:trim(user.role) == 'admin' && menu == 'manage'}">
-				<td align="center">${list.prodQuantity}</td>
-			</c:if>	
+			
 						
 			</tr>
 			
 			<tr>
-				<td id="${list.prodNo}" colspan="11" bgcolor="D6D7D6" height="1"></td>
+			
 			</tr>
 		</c:forEach>
 	</table>
@@ -452,14 +428,7 @@
 	</table>
 
 </form>
-</div>
-<div class="row">
-  <div class="col-xs-6 col-md-3">
-    <a href="#" class="thumbnail">
-     
-    </a>
-  </div>
-  ...
-</div>
+
+
 </body>
 </html>

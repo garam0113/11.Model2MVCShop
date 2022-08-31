@@ -9,10 +9,20 @@
 <html>
 
 <head>
-
-	<link rel="stylesheet" href="/css/admin.css" type="text/css">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	
-	<title></title>
+	<!--   jQuery , Bootstrap CDN  -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" >
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" >
+	<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" ></script>
+	
+	<!-- Bootstrap Dropdown Hover CSS -->
+   <link href="/css/animate.min.css" rel="stylesheet">
+   <link href="/css/bootstrap-dropdownhover.min.css" rel="stylesheet">
+   
+    <!-- Bootstrap Dropdown Hover JS -->
+   <script src="/javascript/bootstrap-dropdownhover.min.js"></script>
 	</head>
 	
 	<script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
@@ -51,19 +61,19 @@
 	
 	$(function(){
 			
-		$("td.ct_btn01:contains('장바구니 추가')").bind("click", function(){
+		$("#no3:contains('장바구니')").bind("click", function(){
 			
 			fncAddBasket();
 			
 		})
 		
-		$("td.ct_btn01:contains('구매')").bind("click", function(){
+		$("#no2:contains('구매')").bind("click", function(){
 			
 			fncPurchase();
 			
 		});
 		
-		$("td.ct_btn01:contains('취소')").bind("click", function(){
+		$("#no:contains('이전')").bind("click", function(){
 			
 			history.go(-1);
 			
@@ -88,6 +98,7 @@
 	});
 	
 	</script>
+
 
 <body bgcolor="#ffffff" text="#000000">
 
@@ -211,7 +222,7 @@
 			<table border="0" cellspacing="0" cellpadding="0">
 				<tr>
 				
-					<c:if test="${user eq null || user.role == 'user'}" >
+					 <c:if test="${user eq null || user.role == 'user'}" >
 						<table border="0" cellspacing="0" cellpadding="0">
 							<tr>
 								
@@ -231,48 +242,30 @@
 							
 						</table>
 						
-						<td width="5" height="25">
-							<img src="/images/ct_btnbg01.gif" width="17" height="23"/>
+						<td>
+						<button type="button" class="btn btn-warning" id="no3">장바구니</button>
+						
 						</td>
 						
-						<td background="/images/ct_btnbg02.gif" width="108" class="ct_btn01" style="padding-top: 3px;">
-							장바구니 추가
-						</td>
-						
-						<td width="5" height="25">
-							<img src="/images/ct_btnbg03.gif" width="14" height="23">
-						</td>
 						
 						<td width="30"></td>
 						
 						<c:if test="${product.prodQuantity ne '0' }">
-							<td width="17" height="25">
-								<img src="/images/ct_btnbg01.gif" width="17" height="23"/>
+						
+						<td>
+						<button type="button" class="btn btn-warning" id="no2">구매</button>
+							
 							</td>
 						
-							<td background="/images/ct_btnbg02.gif" class="ct_btn01" style="padding-top: 3px;">
-								구매
-							</td>
-						
-							<td width="14" height="25">
-								<img src="/images/ct_btnbg03.gif" width="14" height="23">
-							</td>
+							
 						</c:if>
 						
-						<td width="30"></td>
-					</c:if>
+				  </c:if>
 			
-					<td width="17" height="25">
-						<img src="/images/ct_btnbg01.gif" width="17" height="23"/>
+					<td>
+						<button type="button" class="btn btn-warning" id="no">이전</button>
 					</td>
-					
-					<td background="/images/ct_btnbg02.gif" width="108" class="ct_btn01" style="padding-top: 3px;">
-						이전
-					</td>
-					
-					<td width="14" height="25">
-						<img src="/images/ct_btnbg03.gif" width="14" height="23">
-					</td>
+				
 					
 				</tr>
 			</table>
